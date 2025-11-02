@@ -14,6 +14,7 @@ import java.util.Optional;
 
 public class CategoryDao {
 
+    //GET /categories?page=&size= : liste paginée
     public Page<Category> findAll(Pageable pageable) {
         EntityManager em = PersistenceManager.getEntityManagerFactory().createEntityManager();
         try{
@@ -30,6 +31,7 @@ public class CategoryDao {
         }
     }
 
+    //GET /categories/{id}
     public Optional<Category> findById(long id) {
         EntityManager em = PersistenceManager.getEntityManagerFactory().createEntityManager();
         try {
@@ -39,6 +41,9 @@ public class CategoryDao {
             em.close();
         }
     }
+
+    //POST /categories
+    //PUT /categories/{id}
     public Category save(Category category) {
         EntityManager em = PersistenceManager.getEntityManagerFactory().createEntityManager();
         EntityTransaction tx = em.getTransaction();
@@ -55,6 +60,7 @@ public class CategoryDao {
         }
     }
 
+    //DELETE /categories/{id}
     public void deleteById(long id) {
         EntityManager em = PersistenceManager.getEntityManagerFactory().createEntityManager();
         EntityTransaction tx = em.getTransaction();
