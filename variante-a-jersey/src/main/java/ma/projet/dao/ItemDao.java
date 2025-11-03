@@ -2,7 +2,7 @@ package ma.projet.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import ma.projet.common.model.Item;
+import ma.projet.model.Item;
 import ma.projet.persistence.PersistenceManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

@@ -1,7 +1,8 @@
-package ma.projet.common.model;
+package ma.projet.model;
 
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 

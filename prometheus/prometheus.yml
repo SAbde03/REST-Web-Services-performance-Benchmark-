@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'variante-a-jersey'
+    metrics_path: / # Le JMX exporter expose sur /
+    static_configs:
+      # 'variante-a-jersey' est le nom du service, 9404 est le port JMX
+      - targets: ['variante-a-jersey:9404']
+
+  - job_name: 'variante-c-spring-mvc'
+    metrics_path: /actuator/prometheus # Endpoint de Spring Actuator
+    static_configs:
+      # 'variante-c-spring-mvc' est le nom du service, 8080 est le port du conteneur
+      - targets: ['variante-c-spring-mvc:8080']
+
+  - job_name: 'variante-d-spring-data-rest'
+    metrics_path: /actuator/prometheus # Endpoint de Spring Actuator
+    static_configs:
+      # 'variante-d-spring-data-rest' est le nom du service, 8080 est le port du conteneur
+      - targets: ['variante-d-spring-data-rest:8080']

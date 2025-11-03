@@ -1,7 +1,7 @@
 package ma.projet.variantecspringmvc.controller;
 
 
-import ma.projet.common.model.Category;
+import ma.projet.variantecspringmvc.model.Category;
 import ma.projet.variantecspringmvc.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-@Controller
+@RestController
 @RequestMapping("/categories")
 public class CategoryController {
 

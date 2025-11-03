@@ -1,8 +1,7 @@
 package ma.projet.variantecspringmvc.controller;
 
 
-import ma.projet.common.model.Item;
-import ma.projet.variantecspringmvc.repository.ItemRepository;
+import ma.projet.variantecspringmvc.model.Item;
 import ma.projet.variantecspringmvc.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

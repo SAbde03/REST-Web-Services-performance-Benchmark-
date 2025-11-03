@@ -3,7 +3,7 @@ package ma.projet.dao;
 import jakarta.persistence.EntityTransaction;
 import ma.projet.persistence.PersistenceManager;
 import jakarta.persistence.EntityManager;
-import ma.projet.common.model.Category;
+import ma.projet.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

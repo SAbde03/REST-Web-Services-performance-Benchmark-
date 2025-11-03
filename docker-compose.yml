@@ -1,0 +1,120 @@
+version: "3.9"
+
+services:
+  # --- 1. Base de Données ---
+  # Le service "db" que vos applications contacteront
+  db:
+    image: postgres:14
+    container_name: benchmark-db
+    ports:
+      - "5432:5432" # Expose le port sur l'hôte pour un accès facile
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=perf_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Placez vos scripts SQL (schema + données) dans ce dossier
+      - ./db-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d perf_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --- 2. Applications (Variantes) ---
+  # Variante A: JAX-RS (Jersey) sur Tomcat
+  variante-a-jersey:
+    build:
+      context: .
+      dockerfile: ./variante-a-jersey/Dockerfile
+    ports:
+      - "8080:8080" # Hôte:Conteneur
+    environment:
+      # Passe la config DB à votre persistence.xml (vous devrez l'adapter)
+      - DB_URL=jdbc:postgresql://db:5432/perf_db
+      - DB_USER=user
+      - DB_PASSWORD=password
+      # Ajoute l'agent JMX Exporter à Tomcat
+      # NÉCESSITE DE MODIFIER VOTRE DOCKERFILE (voir instructions)
+      - CATALINA_OPTS=-javaagent:/jmx-agent/jmx_prometheus_javaagent.jar=9404:/jmx-agent/config.yml
+    depends_on:
+      db:
+        condition: service_healthy # Attend que la DB soit prête
+
+  # Variante C: Spring Boot (@RestController)
+  variante-c-spring-mvc:
+    build:
+      context: . # Chemin vers le module C
+      dockerfile: ./variante-c-spring-mvc/Dockerfile
+    ports:
+      - "8081:8080" # Hôte:Conteneur
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/perf_db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Variante D: Spring Boot (Spring Data REST)
+  variante-d-spring-data-rest:
+    build:
+      context: . # Chemin vers le module D
+      dockerfile: ./variante-d-spring-data-rest/Dockerfile
+    ports:
+      - "8082:8080" # Hôte:Conteneur
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/perf_db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # --- 3. Pile de Monitoring ---
+  # InfluxDB (pour les résultats JMeter)
+  influxdb:
+    image: influxdb:2.7 # Utilise une version v2 explicite
+    container_name: benchmark-influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    environment:
+      # Requis pour la configuration initiale d'InfluxDB v2
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminpassword
+      - DOCKER_INFLUXDB_INIT_ORG=perf # Doit correspondre à votre config JMeter
+      - DOCKER_INFLUXDB_INIT_BUCKET=jmeter # Doit correspondre à votre config JMeter
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-token
+
+  # Prometheus (pour les métriques JVM et Spring)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: benchmark-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      # Monte le fichier de configuration de Prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+
+  # Grafana (pour les dashboards)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: benchmark-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+# --- 4. Volumes Nommés ---
+# Pour la persistance des données
+volumes:
+  postgres_data:
+  influxdb_data:
+  grafana_data:

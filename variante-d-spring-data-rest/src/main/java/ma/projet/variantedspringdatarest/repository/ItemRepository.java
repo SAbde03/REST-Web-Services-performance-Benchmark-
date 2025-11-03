@@ -1,6 +1,6 @@
 package ma.projet.variantedspringdatarest.repository;
 
-import ma.projet.common.model.Item;
+import ma.projet.variantedspringdatarest.model.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

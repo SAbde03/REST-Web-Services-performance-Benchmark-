@@ -1,7 +1,7 @@
 package ma.projet.variantecspringmvc.service;
 
 
-import ma.projet.common.model.Category;
+import ma.projet.variantecspringmvc.model.Category;
 import ma.projet.variantecspringmvc.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
