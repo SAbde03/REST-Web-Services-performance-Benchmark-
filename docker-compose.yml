@@ -36,7 +36,6 @@ services:
       - DB_USER=user
       - DB_PASSWORD=password
       # Ajoute l'agent JMX Exporter à Tomcat
-      # NÉCESSITE DE MODIFIER VOTRE DOCKERFILE (voir instructions)
       - CATALINA_OPTS=-javaagent:/jmx-agent/jmx_prometheus_javaagent.jar=9404:/jmx-agent/config.yml
     depends_on:
       db:

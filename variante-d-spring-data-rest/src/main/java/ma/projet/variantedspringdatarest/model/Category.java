@@ -1,6 +1,5 @@
 package ma.projet.variantedspringdatarest.model;
 import jakarta.persistence.*;
-import ma.projet.variantecspringmvc.model.Item;
 
 import java.time.Instant;
 import java.util.List;

@@ -6,7 +6,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-import ma.projet.common.model.Item;
+import ma.projet.model.Item;
 import ma.projet.dao.ItemDao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

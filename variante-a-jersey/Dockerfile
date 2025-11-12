@@ -29,10 +29,7 @@ RUN mkdir /jmx-agent
 # Copie l'agent JMX téléchargé depuis la phase de build
 COPY --from=build /workspace/target/jmx_prometheus_javaagent-0.20.0.jar /jmx-agent/jmx_prometheus_javaagent.jar
 
-# Copie le fichier de configuration JMX (depuis le contexte de build)
-# C'est pourquoi vous deviez créer "jmx-config/config.yml"
-COPY jmx-config/config.yml /jmx-agent/config.yml
-
+COPY variante-a-jersey/jmx-config/config.yml /jmx-agent/config.yml
 # Supprime l'application par défaut et déploie notre .war en tant que ROOT
 RUN rm -rf /usr/local/tomcat/webapps/*
 COPY --from=build /workspace/target/*.war /usr/local/tomcat/webapps/ROOT.war
